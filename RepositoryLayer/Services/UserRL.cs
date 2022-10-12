@@ -71,6 +71,23 @@ namespace RepositoryLayer.Services
             return tokenHandler.WriteToken(token);
         }
 
+        //
+
+        public string GenerateJWTToken2(string email, int userid)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(config["Jwt:key"]);
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new[] { new Claim("Email", email),
+                new Claim("Id", userid.ToString()) }),
+                Expires = DateTime.UtcNow.AddDays(11),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            };
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            return tokenHandler.WriteToken(token);
+        }
+
         public string Login(UserLoginModel loginModel)
         {
 
@@ -86,14 +103,24 @@ namespace RepositoryLayer.Services
                     sqlCommand.Parameters.AddWithValue("@Password", loginModel.Password);
 
                     SqlDataReader rd = sqlCommand.ExecuteReader();
-                    if (rd.HasRows)
-                    {
-                        while (rd.Read())
+                    //if (rd.HasRows)
+                    rd.Close();
+                    if (rd != null)
                         {
-                            loginModel.Email = Convert.ToString(rd["Email"] == DBNull.Value ? default : rd["Email"]);
-                            loginModel.Password = Convert.ToString(rd["Password"] == DBNull.Value ? default : rd["Password"]);
-                        }
-                        var token = this.GenerateJWTToken(loginModel.Email);
+                        //while (rd.Read())
+                        //{
+                        //    loginModel.Email = Convert.ToString(rd["Email"] == DBNull.Value ? default : rd["Email"]);
+                        //    loginModel.Password = Convert.ToString(rd["Password"] == DBNull.Value ? default : rd["Password"]);
+                        //}
+                            string query = "SELECT Id FROM Users WHERE Email = '" + loginModel.Email + "'";
+                            SqlCommand cmd = new SqlCommand(query, sqlConnection);
+                        cmd.CommandType = System.Data.CommandType.Text;
+                            var ID =cmd.ExecuteScalar();
+                        int Id = Convert.ToInt32(ID);
+                            
+
+
+                            var token = this.GenerateJWTToken2(loginModel.Email, Id);
                         return token;
                     }
                     return null;

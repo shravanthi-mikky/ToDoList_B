@@ -15,4 +15,9 @@ namespace CommonLayer.Model
         public int UserId { get; set; }
 
     }
+
+    public class ListItemDelete
+    {
+        public int ItemId { get; set; }
+    }
 }

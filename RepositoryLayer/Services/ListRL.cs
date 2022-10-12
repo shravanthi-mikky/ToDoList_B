@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using RepositoryLayer.Interface;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.Text;
 
@@ -12,13 +13,14 @@ namespace RepositoryLayer.Services
     {
         IConfiguration config;
         SqlConnection sqlConnection;
-        string ConnString = "Data Source=LAPTOP-2UH1FDRP\\MSSQLSERVER01;Initial Catalog=BookStore;Integrated Security=True;";
+        string ConnString = "Data Source=LAPTOP-2UH1FDRP\\MSSQLSERVER01;Initial Catalog=ToDoList;Integrated Security=True;";
         public ListRL(IConfiguration config)
         {
             this.config = config;
         }
 
         public ListItemModel AddTask(ListItemModel book, int UserId)
+        //public ListItemModel AddTask(ListItemModel book)
         {
             try
             {
@@ -32,9 +34,9 @@ namespace RepositoryLayer.Services
                     com.Parameters.AddWithValue("@title", book.title);
                     com.Parameters.AddWithValue("@status", book.status);
                     com.Parameters.AddWithValue("@duedate", book.dueDate);
-                    //com.Parameters.AddWithValue("@totalRating", book.startDate);
+                    //com.Parameters.AddWithValue("@startDate", book.startDate);
                     com.Parameters.AddWithValue("@description", book.description);
-                    com.Parameters.AddWithValue("@UserId", UserId);
+                    com.Parameters.AddWithValue("@UserId",UserId);
 
                     com.ExecuteNonQuery();
                     return book;
@@ -49,6 +51,23 @@ namespace RepositoryLayer.Services
             {
                 sqlConnection.Close();
             }
+        }
+
+        public bool DeleteItem(ListItemDelete listItemDelete)
+        {
+            SqlConnection conn = new SqlConnection(ConnString);
+            SqlCommand com = new SqlCommand("Sp_DeleteItem", conn);
+            com.CommandType = CommandType.StoredProcedure;
+            com.Parameters.AddWithValue("@ItemId", listItemDelete.ItemId);
+
+            conn.Open();
+            int i = com.ExecuteNonQuery();
+            conn.Close();
+            if (i >= 1)
+            {
+                return true;
+            }
+            return false;
         }
 
     }
