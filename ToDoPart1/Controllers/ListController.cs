@@ -67,50 +67,51 @@ namespace ToDoPart1.Controllers
             }
         }
 
-        //[Authorize]
-        //[HttpGet("Get")]
-        //public IActionResult GetAllBooks()
-        //{
-        //    try
-        //    {
-        //        var reg = this.iListBL.GetAllListItems();
-        //        if (reg != null)
+        [Authorize]
+        [HttpGet("GetAll")]
+        public IActionResult GetAllTasks()
+        {
+            try
+            {
+                var reg = this.iListBL.GetAllTasks();
+                if (reg != null)
 
-        //        {
-        //            return this.Ok(new { Success = true, message = "All List Details", Response = reg });
-        //        }
-        //        else
-        //        {
-        //            return this.BadRequest(new { Success = false, message = "Unable to get details" });
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return this.BadRequest(new { Success = false, message = ex.Message });
-        //    }
-        //}
+                {
+                    return this.Ok(new { Success = true, message = "All List Details", Response = reg });
+                }
+                else
+                {
+                    return this.BadRequest(new { Success = false, message = "Unable to get details" });
+                }
+            }
+            catch (Exception ex)
+            {
+                return this.BadRequest(new { Success = false, message = ex.Message });
+            }
+        }
+        /*
 
-        //[HttpPut("Update")]
-        //public IActionResult UpdateList(ListItemDelete listItemDelete)
-        //{
-        //    try
-        //    {
-        //        var reg = this.iListBL.UpdateList(listItemDelete);
-        //        if (reg != null)
+        [HttpPut("Update")]
+        public IActionResult UpdateList(ListItemDelete listItemDelete)
+        {
+            try
+            {
+                var reg = this.iListBL.UpdateList(listItemDelete);
+                if (reg != null)
 
-        //        {
-        //            return this.Ok(new { Success = true, message = "List Updated Sucessfull", Response = reg });
-        //        }
-        //        else
-        //        {
-        //            return this.BadRequest(new { Success = false, message = "List details not updated" });
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return this.BadRequest(new { Success = false, message = ex.Message });
-        //    }
-        //}
-
+                {
+                    return this.Ok(new { Success = true, message = "List Updated Sucessfull", Response = reg });
+                }
+                else
+                {
+                    return this.BadRequest(new { Success = false, message = "List details not updated" });
+                }
+            }
+            catch (Exception ex)
+            {
+                return this.BadRequest(new { Success = false, message = ex.Message });
+            }
+        }
+        */
     }
 }

@@ -106,21 +106,18 @@ namespace RepositoryLayer.Services
                     //if (rd.HasRows)
                     rd.Close();
                     if (rd != null)
-                        {
+                    {
                         //while (rd.Read())
                         //{
                         //    loginModel.Email = Convert.ToString(rd["Email"] == DBNull.Value ? default : rd["Email"]);
                         //    loginModel.Password = Convert.ToString(rd["Password"] == DBNull.Value ? default : rd["Password"]);
                         //}
-                            string query = "SELECT Id FROM Users WHERE Email = '" + loginModel.Email + "'";
-                            SqlCommand cmd = new SqlCommand(query, sqlConnection);
+                        string query = "SELECT Id FROM Users WHERE Email = '" + loginModel.Email + "'";
+                        SqlCommand cmd = new SqlCommand(query, sqlConnection);
                         cmd.CommandType = System.Data.CommandType.Text;
-                            var ID =cmd.ExecuteScalar();
+                        var ID =cmd.ExecuteScalar();
                         int Id = Convert.ToInt32(ID);
-                            
-
-
-                            var token = this.GenerateJWTToken2(loginModel.Email, Id);
+                        var token = this.GenerateJWTToken2(loginModel.Email, Id);
                         return token;
                     }
                     return null;
