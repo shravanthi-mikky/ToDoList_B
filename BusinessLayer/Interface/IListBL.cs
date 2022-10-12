@@ -8,5 +8,9 @@ namespace BusinessLayer.Interface
     public interface IListBL
     {
         public ListItemModel AddTask(ListItemModel book, int UserId);
+
+        //public ListItemModel AddTask(ListItemModel book);
+
+        public bool DeleteItem(ListItemDelete listItemDelete);
     }
 }

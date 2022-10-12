@@ -8,5 +8,9 @@ namespace RepositoryLayer.Interface
     public interface IListRL
     {
         public ListItemModel AddTask(ListItemModel book, int UserId);
+
+        //public ListItemModel AddTask(ListItemModel book);
+
+        public bool DeleteItem(ListItemDelete listItemDelete);
     }
 }
