@@ -70,5 +70,86 @@ namespace RepositoryLayer.Services
             return false;
         }
 
+        public List<ListItemModel> GetAllTasks()
+        {
+            List<ListItemModel> books = new List<ListItemModel>();
+            SqlConnection conn = new SqlConnection(ConnString);
+            using (conn)
+            {
+                try
+                {
+                    SqlCommand cmd = new SqlCommand("SpGetAll", conn);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    conn.Open();
+                    SqlDataReader reader = cmd.ExecuteReader();
+
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            books.Add(new ListItemModel
+                            {
+                                UserId = Convert.ToInt32(reader["UserId"]),
+                                title = reader["Title"].ToString(),
+                                status = reader["Status"].ToString(),
+                                startDate = (DateTime)reader["StartDate"],
+                                description = reader["Description"].ToString(),
+                                dueDate = reader["DueDate"].ToString()
+                            });
+                        }
+                        return books;
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+                finally
+                {
+                    conn.Close();
+                }
+
+            }
+        }
+        /*
+        public ListItemModel UpdateBook(ListItemModel book, long bookid)
+        {
+            try
+            {
+                SqlConnection conn = new SqlConnection(ConnString);
+                using (conn)
+                {
+
+                    SqlCommand com = new SqlCommand("Sp_Updatebook", conn);
+                    com.CommandType = CommandType.StoredProcedure;
+                    com.Parameters.AddWithValue("@bookId", bookid);
+                    com.Parameters.AddWithValue("@title", book.title);
+                    com.Parameters.AddWithValue("@status", book.status);
+                    com.Parameters.AddWithValue("@duedate", book.dueDate);
+                    //com.Parameters.AddWithValue("@startDate", book.startDate);
+                    com.Parameters.AddWithValue("@description", book.description);
+
+                    conn.Open();
+                    int i = com.ExecuteNonQuery();
+                    conn.Close();
+                    if (i >= 1)
+                    {
+                        return book;
+                    }
+                    return null;
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+        }
+        */
     }
 }

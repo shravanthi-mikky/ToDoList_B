@@ -12,5 +12,7 @@ namespace RepositoryLayer.Interface
         //public ListItemModel AddTask(ListItemModel book);
 
         public bool DeleteItem(ListItemDelete listItemDelete);
+
+        public List<ListItemModel> GetAllTasks();
     }
 }

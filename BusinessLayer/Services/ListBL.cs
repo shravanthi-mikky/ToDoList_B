@@ -41,5 +41,18 @@ namespace BusinessLayer.Services
                 throw new Exception(ex.Message);
             }
         }
+
+        public List<ListItemModel> GetAllTasks()
+        {
+            try
+            {
+                return iListRL.GetAllTasks();
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
     }
 }
