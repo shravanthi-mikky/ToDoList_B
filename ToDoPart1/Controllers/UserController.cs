@@ -1,6 +1,7 @@
 ﻿using BusinessLayer.Interface;
 using CommonLayer.Model;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System;
 
 namespace ToDoPart1.Controllers
@@ -10,10 +11,14 @@ namespace ToDoPart1.Controllers
     public class UserController : ControllerBase
     {
         IUserBL iUserBL;
-        public UserController(IUserBL iUserBL)
+
+        private readonly ILogger<UserController> logger;
+        public UserController(IUserBL iUserBL, ILogger<UserController> logger)
         {
             this.iUserBL = iUserBL;
+            this.logger = logger;
         }
+        
 
         [HttpPost("Register")]
         public IActionResult AddUser(UserRegistrationModel registrationModel)
@@ -45,6 +50,7 @@ namespace ToDoPart1.Controllers
                 var result = iUserBL.Login(loginModel);
                 if (result != null)
                 {
+                    logger.LogInformation("You have logged in sucessfully");
                     return this.Ok(new { Success = true, message = "Login Successfull", Data = result });
                 }
                 else
@@ -54,6 +60,7 @@ namespace ToDoPart1.Controllers
             }
             catch (Exception e)
             {
+                logger.LogError(e.ToString());
                 return this.BadRequest(new { Success = false, message = e.Message });
             }
         }
